@@ -6,6 +6,14 @@ on:
       - main  # ✅ Runs when pushing to main branch
   workflow_dispatch:  # ✅ Allows manual trigger
 
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true  # Prevents parallel runs on new commits
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -24,7 +32,7 @@ jobs:
       - name: Authenticate with GitHub npm Registry
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
-      - name: Install Dependencies with Yarn
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build Project
@@ -34,18 +42,20 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan gh-pages
-          git reset --hard
-          git add dist -f
+          git fetch origin gh-pages || git checkout --orphan gh-pages
+          git checkout gh-pages
+          git rm -rf .
+          cp -r dist/* .
+          git add .
           git commit -m "Deploy to GitHub Pages"
           git push origin gh-pages --force
 
-      - name: Bump Version & Publish to GitHub npm Registry
+      - name: Publish to GitHub npm Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn version --patch --no-git-tag-version
+          NEW_VERSION=$(yarn version --patch --no-git-tag-version --silent)
           git add package.json
-          git commit -m "Release new version [skip ci]"
+          git commit -m "Release version $NEW_VERSION [skip ci]"
           git push origin main
           yarn publish --access public
