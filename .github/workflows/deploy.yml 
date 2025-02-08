@@ -14,17 +14,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js & Yarn
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'yarn'
+          registry-url: "https://npm.pkg.github.com"
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Authenticate with GitHub npm Registry
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+
+      - name: Install Dependencies with Yarn
+        run: yarn install --frozen-lockfile
 
       - name: Build Project
-        run: npm run build
+        run: yarn build
 
       - name: Deploy to GitHub Pages (CDN)
         run: |
@@ -36,9 +40,12 @@ jobs:
           git commit -m "Deploy to GitHub Pages"
           git push origin gh-pages --force
 
-      - name: Publish to GitHub npm Registry
+      - name: Bump Version & Publish to GitHub npm Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm version patch -m "Release %s [skip ci]"
-          npm publish
+          yarn version --patch --no-git-tag-version
+          git add package.json
+          git commit -m "Release new version [skip ci]"
+          git push origin main
+          yarn publish --access public
