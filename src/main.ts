@@ -1,0 +1,29 @@
+import {defineCustomElement} from "vue";
+
+import DropZone from "@/custom-elements/inputs/DropZone/DropZone.ce.vue";
+import Lightbox from "@/custom-elements/Lightbox/Lightbox.ce.vue";
+import LightboxGallery from "@/custom-elements/Lightbox/LightboxGallery.ce.vue";
+import MediaCollection from "@/custom-elements/MediaCollection/MediaCollection.ce.vue";
+import MediaViewer from "@/custom-elements/MediaViewers/MediaViewer.ce.vue";
+import MediaPreview from "@/custom-elements/MediaPreview/MediaPreview.ce.vue";
+import Overlay from "@/components/ui/Overlay/Overlay.ce.vue";
+import MediaDialogToggle from "@/custom-elements/MediaDialog/MediaDialogToggle.ce.vue";
+
+const elements = {
+  'input-dropzone': DropZone,
+  'light-box': Lightbox,
+  'lightbox-gallery': LightboxGallery,
+  'media-viewer': MediaViewer,
+  'media-collection': MediaCollection,
+  'media-preview': MediaPreview,
+  'overlay-container': Overlay,
+  'media-dialog-toggle': MediaDialogToggle
+}
+
+for (const name in elements) {
+  if (elements.hasOwnProperty(name)) {
+    const element = defineCustomElement(elements[name]);
+    customElements.define(name, element);
+  }
+}
+
