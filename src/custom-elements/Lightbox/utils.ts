@@ -1,5 +1,5 @@
 import {ref} from "vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 
 
 /**

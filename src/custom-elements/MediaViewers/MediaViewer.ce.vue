@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {mimeTypes} from "@/custom-elements/MediaViewers/utils.ts";
 import {computed, type PropType} from "vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 import ImageViewer from "@/custom-elements/MediaViewers/ImageViewer.vue";
 import VideoViewer from "@/custom-elements/MediaViewers/VideoViewer.vue";
 import FallbackViewer from "@/custom-elements/MediaViewers/FallbackViewer.vue";
@@ -28,7 +28,9 @@ const fileType = computed(() => {
 });
 
 // ✅ Select the appropriate component dynamically
-const SelectedComponent = computed(() => componentMap[fileType.value] || componentMap.fallback);
+const SelectedComponent = computed(() => {
+  return componentMap[fileType.value as keyof typeof componentMap] || componentMap.fallback;
+});
 </script>
 
 <template>

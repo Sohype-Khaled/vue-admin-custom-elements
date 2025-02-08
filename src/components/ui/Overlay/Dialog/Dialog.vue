@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Btn from "@/components/ui/Btn.vue";
 
-const props = defineProps<{ title?: string }>();
+
+defineProps<{ title?: string }>();
 
 const emit = defineEmits(['close'])
 </script>

@@ -42,9 +42,9 @@ export interface MediaItem {
 }
 
 export type OnProgress = (progress: number) => void;
-export type OnCancel = () => void;
-export type OnComplete = () => void;
-export type OnError = () => void;
+export type OnCancel = (mediaId: string) => void;
+export type OnComplete = (mediaId: string) => void;
+export type OnError = (error: any) => void;
 
 
 

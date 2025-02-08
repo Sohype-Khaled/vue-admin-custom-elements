@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {onMounted, type PropType, type Ref, ref, watch} from "vue";
-import {MediaItem, MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {MediaItem, MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 import MediaLibraryService from "@/services/mediaLibraryService.ts";
 import MediaCollectionItem from "@/custom-elements/MediaCollection/MediaCollectionItem.vue";
 import draggable from "vuedraggable";
 import {useMediaOptions} from "@/composables/useMediaOptions.ts";
-import {useConfirmation} from "@/composables/useConfirmation.ts";
 
 
 const props = defineProps({
@@ -27,7 +26,7 @@ const items: Ref<MediaItem[]> = ref([]);
 const dragging = ref(false);
 const isLoading = ref(false); // Add a loading state
 const deletingItem = ref<string | null>(null); // Track the item being deleted
-const confirmDialog = useConfirmation();
+
 /**
  * ✅ Watch for changes in `props.options` to refresh data dynamically
  */
@@ -56,10 +55,12 @@ const fetchMediaItems = async () => {
 const reorderMediaItems = async () => {
   try {
     // ✅ Optimistic UI update (Reorder items in local state first)
-    const orderedItems = items.value.map((item, index) => ({
-      uuid: item.uuid,
-      order: index,
-    }));
+    const orderedItems: { uuid: string; order: number }[] = items.value
+        .filter((item) => item.uuid !== undefined)
+        .map((item, index) => ({
+          uuid: item.uuid as string, // Now TypeScript knows it's a string
+          order: index,
+        }));
 
     await MediaLibraryService.reorderCollection(parsedOptions.value, orderedItems);
   } catch (error) {
@@ -89,21 +90,7 @@ const deleteItem = async (uuid: string) => {
 onMounted(() => {
   fetchMediaItems()
 });
-// const dialog = useDialog();
-//
-// const openEditDialog = () => {
-//   dialog.open(MediaForm, {
-//     type: "dialog",
-//     props: {
-//       item: props.groupItems[currentIndex.value],
-//     },
-//     listeners: {
-//       close: () => {
-//         emit('close');
-//       }
-//     },
-//   });
-// }
+
 
 defineExpose({fetchMediaItems});
 
@@ -123,7 +110,7 @@ defineExpose({fetchMediaItems});
         v-if="allowOrdering"
         class="flex-1 overflow-y-auto p-2 max-h-[400px] scrollbar"
         :list="items"
-        :item-key="item => item.uuid"
+        :item-key="(item: MediaItem) => item.uuid "
         ghost-class="ghost"
         handle=".handle"
         @start="dragging = true"

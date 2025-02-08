@@ -9,8 +9,3 @@ export interface LightboxItem {
   group: string;
 }
 
-declare global {
-  interface Window {
-    lightboxGroups: Record<string, string[]>;
-  }
-}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {PropType, ref, watchEffect} from "vue";
+import {type PropType, toRef, watchEffect} from "vue";
 import Btn from "@/components/ui/Btn.vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 import MediaViewer from "@/custom-elements/MediaViewers/MediaViewer.ce.vue";
 
 // Props
@@ -11,11 +11,16 @@ const props = defineProps({
   downloadable: {type: Boolean, default: true},
 });
 const emit = defineEmits(['close'])
-const currentIndex = ref(() => props.currentIndex);
+const currentIndex = toRef(props.currentIndex);
 
+const prevItem = () => {
+  currentIndex.value = (currentIndex.value - 1 + props.groupItems.length) % props.groupItems.length;
+};
 
-const prevItem = () => (currentIndex.value = (currentIndex.value - 1 + props.groupItems.length) % props.groupItems.length);
-const nextItem = () => (currentIndex.value = (currentIndex.value + 1) % props.groupItems.length);
+const nextItem = () => {
+  currentIndex.value = (currentIndex.value + 1) % props.groupItems.length;
+};
+
 watchEffect(() => currentIndex.value = props.currentIndex);
 </script>
 
@@ -30,14 +35,6 @@ watchEffect(() => currentIndex.value = props.currentIndex);
 
   <!-- Close & Download Buttons (Top-right) -->
   <div class="absolute top-4 right-4 flex space-x-2 bg-gray-100 bg-opacity-5 p-2 rounded-full">
-    <!-- Download Button -->
-    <!--    <Btn as="a"-->
-    <!--         v-if="downloadable"-->
-    <!--         rounded-->
-    <!--          severity="white"-->
-    <!--         :href="groupItems[currentIndex].downloadUrl"-->
-    <!--         icon="downloadAll"-->
-    <!--         title="Download all" target="_blank"/>-->
     <Btn as="a"
          v-if="downloadable"
          rounded

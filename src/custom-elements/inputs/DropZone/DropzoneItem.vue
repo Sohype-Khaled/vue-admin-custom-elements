@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {computed, inject, onMounted, type PropType, ref} from "vue";
-import {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 import MediaLibraryService from "@/services/mediaLibraryService.ts";
 import Lightbox from "@/custom-elements/Lightbox/Lightbox.ce.vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 import Btn from "@/components/ui/Btn.vue";
 import ProgressBar from "@/components/ui/ProgressBar/ProgressBar.vue";
 
 const props = defineProps({
-  file: {type: File, required: true},
+  // file: {type: File, required: true},
   item: {type: Object as PropType<LightboxItem>, required: true},
 });
 
@@ -18,26 +18,28 @@ const service = new MediaLibraryService(options as MediaLibraryServiceOptions);
 const uploaded = ref(false);
 const progress = ref(0);
 
-const filename = computed(() => props.file.name);
-const fileType = computed(() => props.file.type.split('/')[1]);
-const size = computed(() => {
-  const kb = props.file.size / 1024;
-  if (kb < 1024) return `${kb.toFixed(1)} KB`;
-  return `${(kb / 1024).toFixed(1)} MB`;
-});
+const filename = computed(() => props.item.file?.name);
+const fileType = computed(() => props.item.file?.type.split('/')[1]);
+//
+// const size = computed(() => {
+//   const sizeInBytes = props.item.file?.size || 0;
+//   const kb = sizeInBytes / 1024;
+//   if (kb < 1024) return `${kb.toFixed(1)} KB`;
+//   return `${(kb / 1024).toFixed(1)} MB`;
+// });
 
 
 const cancelUpload = () => (service.cancelUpload((mediaId) => emit("upload:canceled", mediaId)));
 
 onMounted(() => {
   service.uploadFile(
-      props.file as File,
+      props.item.file as File,
       (progressValue) => (progress.value = progressValue),
       (mediaId) => {
         setTimeout(() => (uploaded.value = true), 2000);
         emit("upload:complete", mediaId);
       },
-      () => (emit("upload:canceled", props.file)),
+      () => (emit("upload:canceled", props.item.file)),
   )
 })
 </script>

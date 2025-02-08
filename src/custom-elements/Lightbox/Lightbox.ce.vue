@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, type PropType, ref, useAttrs, watch} from "vue";
 import LightboxOverlay from "./LightboxOverlay.vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 import MediaPreview from "@/custom-elements/MediaPreview/MediaPreview.ce.vue";
 import {useOverlay} from "@/composables/useOverlay.ts";
 
@@ -29,14 +29,14 @@ const parsedItem = computed<LightboxItem>(() => {
       };
     } catch (error) {
       console.error("Invalid JSON format for Lightbox item:", error);
-      return {}
+      return {}  as LightboxItem;
     }
   }
   return props.item as LightboxItem;
 });
 
 // State
-const groupItems = ref<string[]>([]);
+const groupItems = ref<LightboxItem[]>([]);
 const currentIndex = ref(0);
 
 // Use `$attrs` to bind all attributes to the slot

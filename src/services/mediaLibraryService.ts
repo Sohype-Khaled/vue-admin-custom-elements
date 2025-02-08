@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import {
+import type {
   MediaLibraryServiceOptions,
   OnCancel,
   OnComplete,
@@ -17,15 +17,17 @@ export default class MediaLibraryService {
 
 
   constructor(options: MediaLibraryServiceOptions) {
-    this.options = options
+    this.options = {
+      ...options,
+      chunkSize: options.chunkSize ?? 5 * 1024 * 1024 // Default to 5MB if undefined
+    };
   }
-
   public async startUpload(file: File) {
     return await ApiService.post(`${this.options.baseUrl}/s3/upload/start/`, {
       file_name: file.name,
       mime_type: file.type,
       size: file.size,
-      chunk_count: Math.ceil(file.size / this.options.chunkSize),
+      chunk_count: Math.ceil(file.size / (this.options.chunkSize ?? 5 * 1024 * 1024)),
       ...this.options.target,
       location: this.options.bucket,
       chunk_size: this.options.chunkSize,
@@ -36,8 +38,9 @@ export default class MediaLibraryService {
 
   public chunkFile(file: File): Blob[] {
     const chunks = [];
-    for (let i = 0; i < file.size; i += this.options.chunkSize) {
-      chunks.push(file.slice(i, i + this.options.chunkSize));
+
+    for (let i = 0; i < file.size; i += (this.options.chunkSize ?? 5 * 1024 * 1024)) {
+      chunks.push(file.slice(i, i + (this.options.chunkSize ?? 5 * 1024 * 1024)));
     }
     return chunks;
   }
@@ -105,7 +108,7 @@ export default class MediaLibraryService {
     }
 
     // Call the external onCancel callback, if any.
-    onCancel(this.mediaId);
+    onCancel(this.mediaId as string);
   }
 
   public async uploadFile(

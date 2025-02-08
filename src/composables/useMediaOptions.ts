@@ -1,5 +1,5 @@
 import {computed, type Ref} from "vue";
-import {AuthPayload, MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {AuthPayload, MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 
 /**
  * ✅ Helper function to validate authentication payload

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import DropZone from "@/custom-elements/inputs/DropZone/DropZone.ce.vue";
 import {type PropType, ref} from "vue";
-import {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 import DialogBody from "@/components/ui/Overlay/Dialog/DialogBody.vue";
 import MediaCollection from "@/custom-elements/MediaCollection/MediaCollection.ce.vue";
 
-const props = defineProps({
+defineProps({
   options: {type: Object as PropType<MediaLibraryServiceOptions>, required: true},
   editable: {type: Boolean, default: false},
   withUpload: {type: Boolean, default: false},

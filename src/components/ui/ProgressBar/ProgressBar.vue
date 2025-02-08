@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const props = defineProps({
-  progress: { type: Number, required: true }, // Progress percentage
+defineProps({
+  progress: {type: Number, required: true}, // Progress percentage
 });
 </script>
 

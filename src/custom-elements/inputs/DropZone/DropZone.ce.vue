@@ -3,7 +3,7 @@ import {type PropType, provide, ref} from "vue";
 import DropzoneItem from "@/custom-elements/inputs/DropZone/DropzoneItem.vue";
 import SVGIcon from "@/components/SVGIcon/SVGIcon.vue";
 import {useLightbox} from "@/custom-elements/Lightbox/utils.ts";
-import {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 import {useMediaOptions} from "@/composables/useMediaOptions.ts";
 
 /**
@@ -25,7 +25,7 @@ provide("options", parsedOptions.value);
  * Define Emits
  */
 const emit = defineEmits(["change", "fileUploaded"]);
-const {lightboxItems, handleFileChange, removeItem} = useLightbox(parsedOptions.value.collectionName);
+const {lightboxItems, handleFileChange} = useLightbox(parsedOptions.value.collectionName);
 
 /**
  * File Handling States
@@ -34,7 +34,7 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const isDragging = ref(false);
 const files = ref<File[]>([]);
 
-const uploadedFiles = ref([]);
+const uploadedFiles = ref<string[]>([]); // ✅ Explicitly type as an array of strings
 
 /**
  * Methods
@@ -47,11 +47,11 @@ const handleDrop = (event: DragEvent) => {
   event.preventDefault();
   isDragging.value = false;
   if (event.dataTransfer?.files) {
-    handleFileChange({target: {files: event.dataTransfer.files}} as Event);
+    handleFileChange({ target: { files: event.dataTransfer.files } } as unknown as Event);
   }
 };
 
-const fileUploaded = (index, mediaId: string) => {
+const fileUploaded = (index: number, mediaId: string) => {
   if (props.clearOnComplete) {
     removeFile(index, mediaId);
   } else {

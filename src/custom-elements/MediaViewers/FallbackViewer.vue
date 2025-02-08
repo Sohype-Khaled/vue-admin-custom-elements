@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {LightboxItem} from "@/types/lightbox.ts";
-import {PropType} from "vue";
+import type {LightboxItem} from "@/types/lightbox.ts";
+import {type PropType} from "vue";
 
 defineProps({
   item: {type: Object as PropType<LightboxItem>, required: true},

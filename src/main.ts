@@ -22,8 +22,9 @@ const elements = {
 
 for (const name in elements) {
   if (elements.hasOwnProperty(name)) {
-    const element = defineCustomElement(elements[name]);
+    const element = defineCustomElement(elements[name as keyof typeof elements]);
     customElements.define(name, element);
   }
 }
+
 

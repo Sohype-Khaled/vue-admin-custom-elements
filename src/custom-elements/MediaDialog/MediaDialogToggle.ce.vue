@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {type PropType, provide, ref} from "vue";
-import {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
+import type {MediaLibraryServiceOptions} from "@/types/mediaLibrary.ts";
 import {useMediaOptions} from "@/composables/useMediaOptions.ts";
 import {useDialog} from "@/composables/useDialog.ts";
 import MediaDialog from "@/custom-elements/MediaDialog/MediaDialog.vue";

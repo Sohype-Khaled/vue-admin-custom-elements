@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {MediaItem} from "@/types/mediaLibrary.ts";
+import type {MediaItem} from "@/types/mediaLibrary.ts";
 import {computed, type PropType} from "vue";
 import SVGIcon from "@/components/SVGIcon/SVGIcon.vue";
 import Lightbox from "@/custom-elements/Lightbox/Lightbox.ce.vue";
-import {LightboxItem} from "@/types/lightbox.ts";
+import type {LightboxItem} from "@/types/lightbox.ts";
 
 
 const props = defineProps({
@@ -17,20 +17,23 @@ const props = defineProps({
 const emit = defineEmits(["item:delete", "item:edit"]);
 
 const preview = computed<LightboxItem>(() => ({
-  url: props.item.urls?.preview,
-  downloadUrl: props.item.urls?.download,
-  filename: props.item.file_name,
-  type: props.item.mime_type,
-  caption: props.item?.caption,
-  thumbnail: props.item?.urls.thumbnail,
-  group: props.item?.collection_name
+  url: props.item.urls?.preview || "",
+  downloadUrl: props.item.urls?.download || "",
+  filename: props.item.file_name || "Untitled",
+  type: props.item.mime_type || "unknown",
+  caption: props.item?.caption || "",
+  thumbnail: props.item?.urls?.thumbnail || "",
+  group: props.item?.collection_name || "",
 }));
 
 const size = computed(() => {
-  const kb = props.item?.size / 1024;
+  const sizeInBytes = props.item?.size ?? 0; // Default to 0 if undefined
+  const kb = sizeInBytes / 1024;
+
   if (kb < 1024) return `${kb.toFixed(1)} KB`;
   return `${(kb / 1024).toFixed(1)} MB`;
 });
+
 
 const fileType = computed(() => {
   let type = ''
