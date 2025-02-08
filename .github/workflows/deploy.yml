@@ -61,14 +61,29 @@ jobs:
           git add admin-components.js
           git commit -m "Deploy admin-components.js to GitHub Pages"
           git push origin gh-pages --force
-      
 
-      - name: Publish to GitHub npm Registry
+      - name: Check package.json
+        run: ls -lah && cat package.json
+
+
+      - name: Bump Version & Publish to GitHub npm Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./admin  # Change to the correct path where package.json exists
         run: |
           NEW_VERSION=$(yarn version --patch --no-git-tag-version --silent)
           git add package.json
           git commit -m "Release version $NEW_VERSION [skip ci]"
+          git push origin main
+          yarn publish --access public
+
+      - name: Bump Version & Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd /home/runner/work/vue-admin-custom-elements/vue-admin-custom-elements  # Ensure correct path
+          yarn version --patch --no-git-tag-version
+          git add package.json
+          git commit -m "Release new version [skip ci]"
           git push origin main
           yarn publish --access public
