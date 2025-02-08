@@ -38,16 +38,24 @@ jobs:
       - name: Build Project
         run: yarn build
 
-      - name: Deploy to GitHub Pages (CDN)
+      - name: Deploy `admin-components.js` to GitHub Pages (CDN)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Fetch existing gh-pages branch if it exists
           git fetch origin gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
+
+          # Remove all existing files
           git rm -rf .
-          cp -r dist/* .
-          git add .
-          git commit -m "Deploy to GitHub Pages"
+
+          # Copy only the required file
+          cp dist/admin-components.js .
+
+          # Commit and push the new file
+          git add admin-components.js
+          git commit -m "Deploy admin-components.js to GitHub Pages"
           git push origin gh-pages --force
 
       - name: Publish to GitHub npm Registry
