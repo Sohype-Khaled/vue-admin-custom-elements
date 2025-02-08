@@ -20,14 +20,6 @@ const progress = ref(0);
 
 const filename = computed(() => props.item.file?.name);
 const fileType = computed(() => props.item.file?.type.split('/')[1]);
-//
-// const size = computed(() => {
-//   const sizeInBytes = props.item.file?.size || 0;
-//   const kb = sizeInBytes / 1024;
-//   if (kb < 1024) return `${kb.toFixed(1)} KB`;
-//   return `${(kb / 1024).toFixed(1)} MB`;
-// });
-
 
 const cancelUpload = () => (service.cancelUpload((mediaId) => emit("upload:canceled", mediaId)));
 

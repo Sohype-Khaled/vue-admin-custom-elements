@@ -1,12 +1,6 @@
 import axios from "axios";
 
-import type {
-  MediaLibraryServiceOptions,
-  OnCancel,
-  OnComplete,
-  OnError,
-  OnProgress
-} from '@/types/mediaLibrary.ts';
+import type {MediaLibraryServiceOptions, OnCancel, OnComplete, OnError, OnProgress} from '@/types/mediaLibrary.ts';
 import {ApiService} from "@/services/APIService.ts";
 import {useConfirmation} from "@/composables/useConfirmation.ts";
 
@@ -22,6 +16,7 @@ export default class MediaLibraryService {
       chunkSize: options.chunkSize ?? 5 * 1024 * 1024 // Default to 5MB if undefined
     };
   }
+
   public async startUpload(file: File) {
     return await ApiService.post(`${this.options.baseUrl}/s3/upload/start/`, {
       file_name: file.name,
@@ -45,12 +40,18 @@ export default class MediaLibraryService {
     return chunks;
   }
 
-  public async uploadChunk(url: string, file: Blob, signal: AbortSignal) {
-    const response = await ApiService.put(url, file, {signal});
-    return JSON.parse(response.headers["etag"]);
+  public async uploadChunk(partNumber: number, file: Blob, signal: AbortSignal) {
+    const response = await ApiService.put(`${this.options.baseUrl}/s3/upload/${this.mediaId}/part/${partNumber}/`, file, {
+      signal,
+      headers: {
+        ...this.options.auth.headers,
+        "Content-Type": "application/octet-stream"
+      }
+    });
+    return JSON.parse(response.data["ETag"]);
   }
 
-  public async uploadFileInChunks(presignedUrls: string[], file: File, onProgress: OnProgress) {
+  public async uploadFileInChunks(file: File, onProgress: OnProgress) {
     if (this.abortController) {
       throw new Error("Upload already in progress");
     }
@@ -62,10 +63,9 @@ export default class MediaLibraryService {
 
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
-      const url = presignedUrls[i];
 
       try {
-        const ETag = await this.uploadChunk(url, chunk, signal);
+        const ETag = await this.uploadChunk(i + 1, chunk, signal);
         completedChunks.push({ETag, PartNumber: i + 1});
         onProgress(((i + 1) / chunks.length) * 100);
       } catch (error: any) {
@@ -125,10 +125,10 @@ export default class MediaLibraryService {
       onError(error);
       throw error;
     }
-    const {presigned_urls, media_id} = response.data;
+    const {media_id} = response.data;
     this.mediaId = media_id;
     try {
-      const completedChunks = await this.uploadFileInChunks(presigned_urls, file, onProgress);
+      const completedChunks = await this.uploadFileInChunks(file, onProgress);
       await this.completeUpload(media_id, {parts: completedChunks});
       onComplete(media_id);
       return {media_id, completedChunks};
