@@ -1,0 +1,44 @@
+name: Deploy Admin Components
+
+on:
+  push:
+    branches:
+      - main  # ✅ Runs when pushing to main branch
+  workflow_dispatch:  # ✅ Allows manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages (CDN)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages
+          git reset --hard
+          git add dist -f
+          git commit -m "Deploy to GitHub Pages"
+          git push origin gh-pages --force
+
+      - name: Publish to GitHub npm Registry
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm version patch -m "Release %s [skip ci]"
+          npm publish

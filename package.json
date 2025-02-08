@@ -1,12 +1,32 @@
 {
   "name": "admin-components",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "description": "Admin Components for Vue 3",
+  "author": {
+    "name": "Sohype Khaled",
+    "email": "sohype.mop@gmail.com"
+  },
+  "version": "1.0.0",
   "type": "module",
+  "main": "dist/admin-components.js",
+  "module": "dist/admin-components.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sohype-Khaled/vue-admin-custom-elements.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "deploy": "npm run build && git add dist -f && git commit -m 'Deploy to GitHub Pages' && git subtree push --prefix dist origin gh-pages",
     "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.13"
   },
   "dependencies": {
     "@types/axios": "^0.14.4",
