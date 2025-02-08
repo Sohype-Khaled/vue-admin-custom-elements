@@ -50,4 +50,3 @@ jobs:
           files: dist/admin-components.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
