@@ -10,10 +10,6 @@ permissions:
   contents: write
   packages: write
 
-concurrency:
-  group: deploy
-  cancel-in-progress: true  # Prevents parallel runs on new commits
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -38,52 +34,20 @@ jobs:
       - name: Build Project
         run: yarn build
 
-      - name: Deploy `admin-components.js` to GitHub Pages (CDN)
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Get Version Number
+        id: get_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
-          # Check if gh-pages branch exists remotely
-          if git ls-remote --exit-code origin gh-pages; then
-            git fetch origin gh-pages
-            git checkout gh-pages
-          else
-            git checkout --orphan gh-pages
-          fi
-
-          # Remove all existing files
-          git rm -rf . > /dev/null 2>&1 || true
-
-          # Copy only the required file
-          cp dist/admin-components.js .
-
-          # Commit and push the new file
-          git add admin-components.js
-          git commit -m "Deploy admin-components.js to GitHub Pages"
-          git push origin gh-pages --force
-
-      - name: Check package.json
-        run: ls -lah && cat package.json
-
-
-      - name: Bump Version & Publish to GitHub npm Registry
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          body: "New release of admin-components.js"
+          draft: false
+          prerelease: false
+          files: dist/admin-components.js
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ./admin  # Change to the correct path where package.json exists
-        run: |
-          NEW_VERSION=$(yarn version --patch --no-git-tag-version --silent)
-          git add package.json
-          git commit -m "Release version $NEW_VERSION [skip ci]"
-          git push origin main
-          yarn publish --access public
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Bump Version & Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd /home/runner/work/vue-admin-custom-elements/vue-admin-custom-elements  # Ensure correct path
-          yarn version --patch --no-git-tag-version
-          git add package.json
-          git commit -m "Release new version [skip ci]"
-          git push origin main
-          yarn publish --access public
