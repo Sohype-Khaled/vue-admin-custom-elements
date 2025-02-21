@@ -13,7 +13,7 @@
       },
       "bucket": "nawahmedia",
       "displayName": "Thumbnail",
-      "target": {"app_label": "blogs", "model_name": "News", "object_id": 31},
+      "target": {"app_label": "blogs", "model_name": "Article", "object_id": 10},
       "collection-name": "thumb",
     },
     allowOrdering: true,

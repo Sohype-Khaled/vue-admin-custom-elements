@@ -15,8 +15,8 @@
       displayName: "Thumbnail",
       target: {
         app_label: "blogs",
-        model_name: "News",
-        object_id: 31
+        model_name: "Article",
+        object_id: 10
       },
       collectionName: "thumb",
     },
