@@ -40,15 +40,32 @@ export default class MediaLibraryService {
     return chunks;
   }
 
+  public async computeSHA256(chunk: Blob): Promise<string> {
+    const arrayBuffer = await chunk.arrayBuffer(); // Convert Blob to ArrayBuffer
+    const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+
+    return Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
   public async uploadChunk(partNumber: number, file: Blob, signal: AbortSignal) {
+    const chunkChecksum = await this.computeSHA256(file);
+
     const response = await ApiService.put(`${this.options.baseUrl}/s3/upload/${this.mediaId}/part/${partNumber}/`, file, {
       signal,
       headers: {
         ...this.options.auth.headers,
-        "Content-Type": "application/octet-stream"
+        "Content-Type": "application/octet-stream",
+        "X-Chunk-Checksum": chunkChecksum
       }
     });
-    return JSON.parse(response.data["ETag"]);
+
+    if (response.data.checksum !== chunkChecksum) {
+      console.error(`Checksum mismatch! Chunk ${partNumber} corrupted.`);
+      return false; // Signal failure for retry
+    }
+    return true;
   }
 
   public async uploadFileInChunks(file: File, onProgress: OnProgress) {
@@ -59,14 +76,22 @@ export default class MediaLibraryService {
     this.abortController = new AbortController();
     const {signal} = this.abortController;
     const chunks: Blob[] = this.chunkFile(file);
-    const completedChunks = [];
+    // const completedChunks = [];
 
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
-
+      let retries = 3;
+      let success = false;
       try {
-        const ETag = await this.uploadChunk(i + 1, chunk, signal);
-        completedChunks.push({ETag, PartNumber: i + 1});
+        while (retries > 0 && !success) {
+          success = await this.uploadChunk(i + 1, chunk, signal);
+          if (!success) {
+            console.warn(`Retrying chunk ${i + 1} (${3 - retries + 1}/3)`);
+            retries--;
+          }
+        }
+        // const ETag = await this.uploadChunk(i + 1, chunk, signal);
+        // completedChunks.push({ETag, PartNumber: i + 1});
         onProgress(((i + 1) / chunks.length) * 100);
       } catch (error: any) {
         if (axios.isCancel(error)) {
@@ -79,7 +104,7 @@ export default class MediaLibraryService {
     }
 
     this.abortController = null; // Reset controller after completion
-    return completedChunks;
+    // return completedChunks;
   }
 
   public async completeUpload(mediaId: string, data: { parts: Array<{ ETag: string; PartNumber: number }> }) {

@@ -10,6 +10,7 @@ import Overlay from "@/components/ui/Overlay/Overlay.ce.vue";
 import MediaDialogToggle from "@/custom-elements/MediaDialog/MediaDialogToggle.ce.vue";
 import DetailsCard from "@/custom-elements/DetailsCard/DetailsCard.ce.vue";
 import DetailsCardItem from "@/custom-elements/DetailsCard/DetailsCardItem.ce.vue";
+import OrderItem from "@/custom-elements/OrderItem/OrderItem.ce.vue";
 
 const elements = {
   'input-dropzone': DropZone,
@@ -21,7 +22,8 @@ const elements = {
   'overlay-container': Overlay,
   'media-dialog-toggle': MediaDialogToggle,
   'details-card': DetailsCard,
-  'details-card-item': DetailsCardItem
+  'details-card-item': DetailsCardItem,
+  'order-item': OrderItem
 }
 
 for (const name in elements) {
