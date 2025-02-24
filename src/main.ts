@@ -12,6 +12,7 @@ import DetailsCard from "@/custom-elements/DetailsCard/DetailsCard.ce.vue";
 import DetailsCardItem from "@/custom-elements/DetailsCard/DetailsCardItem.ce.vue";
 import OrderItem from "@/custom-elements/OrderItem/OrderItem.ce.vue";
 import BtnUpload from "@/custom-elements/inputs/BtnUpload/BtnUpload.ce.vue";
+import SVGIcon from "./components/SVGIcon/SVGIcon.vue";
 
 const elements = {
   'input-dropzone': DropZone,
@@ -36,3 +37,18 @@ for (const name in elements) {
 }
 
 
+export default {
+  DropZone,
+  Lightbox,
+  LightboxGallery,
+  MediaViewer,
+  MediaCollection,
+  MediaPreview,
+  Overlay,
+  MediaDialogToggle,
+  DetailsCard,
+  DetailsCardItem,
+  OrderItem,
+  BtnUpload,
+  SVGIcon
+}
