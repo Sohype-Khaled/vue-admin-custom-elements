@@ -1,5 +1,6 @@
 {
   "name": "admin-components",
+  "version": "1.0.0",
   "private": false,
   "license": "MIT",
   "description": "Admin Components for Vue 3",
@@ -7,7 +8,7 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
-  "version": "1.0.0",
+
   "type": "module",
   "main": "dist/admin-components.js",
   "module": "dist/admin-components.js",
