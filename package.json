@@ -8,11 +8,10 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
-
+  "types": "dist/admin-components.d.ts",
   "type": "module",
   "main": "dist/admin-components.js",
   "module": "dist/admin-components.js",
-  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
