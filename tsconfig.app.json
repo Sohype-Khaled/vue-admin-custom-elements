@@ -9,6 +9,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
+    "declaration": true,
+    "outDir": "./dist",
     "paths": {
       "@/*": [
         "./src/*"

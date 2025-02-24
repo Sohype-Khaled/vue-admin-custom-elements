@@ -1,8 +1,16 @@
-import {useOverlay} from "./useOverlay";
+import {type OverlayInstance, useOverlay} from "./useOverlay";
 import DialogConfirmation from "@/components/ui/Overlay/Dialog/DialogConfirmation.vue";
+import type {ComputedRef, Ref} from "vue";
 
+interface UseConfirmationReturn {
+  isOpen: ComputedRef<boolean>;
+  overlayStack: Ref<OverlayInstance[]>;
+  topOverlay: any;
+  close: (id?: number) => void;
+  confirm: (options?: Record<string, any>) => Promise<boolean>;
+}
 
-export function useConfirmation() {
+export function useConfirmation(): UseConfirmationReturn {
   const {open, close, overlayStack, topOverlay, isOpen} = useOverlay();
 
   function confirm(

@@ -27,6 +27,12 @@ export default defineConfig({
         name: 'AdminComponents', // ✅ Global variable name (required for IIFE)
         entryFileNames: 'admin-components.js', // ✅ Set the file name
       }
-    }
+    },
+    lib: {
+      entry: 'src/main.ts',
+      name: 'AdminComponents',
+      fileName: 'admin-components',
+      formats: ['iife'],
+    },
   }
 })

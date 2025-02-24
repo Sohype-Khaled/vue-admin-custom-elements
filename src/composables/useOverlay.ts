@@ -8,7 +8,7 @@ interface OverlayOptions {
   type?: OverlayType;
 }
 
-interface OverlayInstance {
+export interface OverlayInstance {
   id: number;
   component: any;
   props: Record<string, any>;
