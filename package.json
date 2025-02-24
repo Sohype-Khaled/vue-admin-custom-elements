@@ -10,8 +10,8 @@
   },
   "types": "dist/vue-admin-custom-elements.d.ts",
   "type": "module",
-  "main": "dist/vue-admin-custom-elements",
-  "module": "dist/vue-admin-custom-elements",
+  "main": "dist/vue-admin-custom-elements.js",
+  "module": "dist/vue-admin-custom-elements.js",
   "files": [
     "dist"
   ],
