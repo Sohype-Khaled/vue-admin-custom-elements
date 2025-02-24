@@ -31,6 +31,7 @@ const attrs = useAttrs();
 // ✅ Compute button classes
 const buttonClasses = computed(() => [
   "btn",
+  "cursor-pointer",
   `btn-${props.severity}`,
   `btn-${props.size}`,
   props.icon ? "btn-icon" : "",

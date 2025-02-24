@@ -8,7 +8,6 @@ import Btn from "@/components/ui/Btn.vue";
 import ProgressBar from "@/components/ui/ProgressBar/ProgressBar.vue";
 
 const props = defineProps({
-  // file: {type: File, required: true},
   item: {type: Object as PropType<LightboxItem>, required: true},
 });
 

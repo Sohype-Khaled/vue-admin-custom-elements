@@ -103,7 +103,6 @@ const removeFile = (index: number, mediaId: string) => {
           v-for="(item, index) in lightboxItems"
           :key="item.filename"
           :item="item"
-          :file="item.file"
           @click.stop
           @upload:canceled="(mediaId) => removeFile(index, mediaId)"
           @upload:complete="(mediaId) => fileUploaded(index, mediaId)"

@@ -11,6 +11,7 @@ import MediaDialogToggle from "@/custom-elements/MediaDialog/MediaDialogToggle.c
 import DetailsCard from "@/custom-elements/DetailsCard/DetailsCard.ce.vue";
 import DetailsCardItem from "@/custom-elements/DetailsCard/DetailsCardItem.ce.vue";
 import OrderItem from "@/custom-elements/OrderItem/OrderItem.ce.vue";
+import BtnUpload from "@/custom-elements/inputs/BtnUpload/BtnUpload.ce.vue";
 
 const elements = {
   'input-dropzone': DropZone,
@@ -23,7 +24,8 @@ const elements = {
   'media-dialog-toggle': MediaDialogToggle,
   'details-card': DetailsCard,
   'details-card-item': DetailsCardItem,
-  'order-item': OrderItem
+  'order-item': OrderItem,
+  'btn-upload': BtnUpload
 }
 
 for (const name in elements) {
