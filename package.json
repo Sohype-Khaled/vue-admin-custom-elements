@@ -1,5 +1,5 @@
 {
-  "name": "admin-components",
+  "name": "vue-admin-custom-elements",
   "version": "1.0.0",
   "private": false,
   "license": "MIT",
@@ -8,10 +8,10 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
-  "types": "dist/admin-components.d.ts",
+  "types": "dist/vue-admin-custom-elements.d.ts",
   "type": "module",
-  "main": "dist/admin-components.js",
-  "module": "dist/admin-components.js",
+  "main": "dist/vue-admin-custom-elements",
+  "module": "dist/vue-admin-custom-elements",
   "files": [
     "dist"
   ],

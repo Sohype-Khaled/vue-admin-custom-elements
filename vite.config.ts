@@ -20,19 +20,19 @@ export default defineConfig({
     }
   },
   build: {
-    rollupOptions: {
-      input: 'src/main.ts',
-      output: {
-        format: 'iife', // ✅ Wraps the output in an IIFE
-        name: 'AdminComponents', // ✅ Global variable name (required for IIFE)
-        entryFileNames: 'admin-components.js', // ✅ Set the file name
-      }
-    },
+    // rollupOptions: {
+    //   input: 'src/main.ts',
+    //   output: {
+    //     format: 'iife', // ✅ Wraps the output in an IIFE
+    //     name: 'AdminComponents', // ✅ Global variable name (required for IIFE)
+    //     entryFileNames: 'admin-components.js', // ✅ Set the file name
+    //   }
+    // },
     lib: {
       entry: 'src/main.ts',
-      name: 'AdminComponents',
-      fileName: 'admin-components',
-      formats: ['iife'],
+      name: 'VueAdminCustomElements',
+      fileName: 'vue-admin-custom-elements',
+      formats: ['es', 'iife'],
     },
   }
 })

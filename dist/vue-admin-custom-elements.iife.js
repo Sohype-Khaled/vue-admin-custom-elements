@@ -1,4 +1,4 @@
-var AdminComponents=function(){"use strict";var t3=Object.defineProperty;var e3=(Jt,wt,fr)=>wt in Jt?t3(Jt,wt,{enumerable:!0,configurable:!0,writable:!0,value:fr}):Jt[wt]=fr;var zc=(Jt,wt,fr)=>e3(Jt,typeof wt!="symbol"?wt+"":wt,fr);/**
+var VueAdminCustomElements=function(){"use strict";var t3=Object.defineProperty;var e3=(Jt,wt,fr)=>wt in Jt?t3(Jt,wt,{enumerable:!0,configurable:!0,writable:!0,value:fr}):Jt[wt]=fr;var zc=(Jt,wt,fr)=>e3(Jt,typeof wt!="symbol"?wt+"":wt,fr);/**
 * @vue/shared v3.5.13
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
