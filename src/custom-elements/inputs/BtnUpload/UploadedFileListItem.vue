@@ -35,8 +35,8 @@ onMounted(() => {
 
 <template>
   <div
-      class="flex items-center justify-between p-2 border-b border-gray-200">
-    <div class="text-sm font-medium text-gray-800" v-text="file.name"/>
+      class="flex items-center justify-between order-b border-gray-200 w-100">
+    <div class="text-xs font-normal text-gray-800" v-text="file.name"/>
     <div class="flex justify-center items-center ms-auto">
       <div class="w-[100px] pe-1">
         <ProgressBar :progress="progress"/>

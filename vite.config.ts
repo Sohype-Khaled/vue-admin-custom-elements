@@ -8,7 +8,6 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          // treat all tags with a dash as custom elements
           isCustomElement: (tag) => tag.includes('-')
         }
       }
@@ -20,14 +19,6 @@ export default defineConfig({
     }
   },
   build: {
-    // rollupOptions: {
-    //   input: 'src/main.ts',
-    //   output: {
-    //     format: 'iife', // ✅ Wraps the output in an IIFE
-    //     name: 'AdminComponents', // ✅ Global variable name (required for IIFE)
-    //     entryFileNames: 'admin-components.js', // ✅ Set the file name
-    //   }
-    // },
     lib: {
       entry: 'src/main.ts',
       name: 'VueAdminCustomElements',

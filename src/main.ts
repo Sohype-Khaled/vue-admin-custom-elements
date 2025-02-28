@@ -12,7 +12,9 @@ import DetailsCard from "@/custom-elements/DetailsCard/DetailsCard.ce.vue";
 import DetailsCardItem from "@/custom-elements/DetailsCard/DetailsCardItem.ce.vue";
 import OrderItem from "@/custom-elements/OrderItem/OrderItem.ce.vue";
 import BtnUpload from "@/custom-elements/inputs/BtnUpload/BtnUpload.ce.vue";
-import SVGIcon from "./components/SVGIcon/SVGIcon.vue";
+import SVGIcon from "@/components/SVGIcon/SVGIcon.vue";
+import UploadedList from "@/custom-elements/inputs/BtnUpload/UploadedList.ce.vue";
+import TestUpload from "@/custom-elements/inputs/BtnUpload/TestUpload.ce.vue";
 
 const elements = {
   'input-dropzone': DropZone,
@@ -26,7 +28,8 @@ const elements = {
   'details-card': DetailsCard,
   'details-card-item': DetailsCardItem,
   'order-item': OrderItem,
-  'btn-upload': BtnUpload
+  'btn-upload': BtnUpload,
+  'uploaded-list': UploadedList
 }
 
 for (const name in elements) {
@@ -36,6 +39,16 @@ for (const name in elements) {
   }
 }
 
+const testElements = {
+  "test-upload": TestUpload
+}
+
+for (const name in testElements) {
+  if (testElements.hasOwnProperty(name)) {
+    const element = defineCustomElement(testElements[name as keyof typeof testElements]);
+    customElements.define(name, element);
+  }
+}
 
 export default {
   DropZone,

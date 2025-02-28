@@ -14,12 +14,13 @@
         displayName: "Thumbnail",
         collectionName: "thumb",
     };
+
     const container = document.getElementById('btn-upload-container');
-    const btnUpload = document.createElement('btn-upload');
 
+    const testUpload = document.createElement('test-upload');
 
-    btnUpload.setAttribute('options', JSON.stringify(data));
-    btnUpload.setAttribute('teleport-target', '#upload-target');
+    testUpload.setAttribute('options', JSON.stringify(data));
 
-    container.appendChild(btnUpload);
-})()
+    container.appendChild(testUpload);
+
+})();
