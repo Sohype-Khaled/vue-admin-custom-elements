@@ -1,15 +1,15 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import vue from "@vitejs/plugin-vue";
-import { fileURLToPath, URL } from "node:url";
+import {fileURLToPath, URL} from "node:url";
 import dts from "vite-plugin-dts";
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({mode}) => {
   const isCustomElement = mode === "custom-element";
   const isLibrary = mode === "library";
 
   return {
-    define: { "process.env.NODE_ENV": JSON.stringify("production") },
+    define: {"process.env.NODE_ENV": JSON.stringify("production")},
     plugins: [
       vue({
         template: {
@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
             ? "./src/library.ts"
             : "./src/index.ts",
         name: "MyComponentLibrary",
-        fileName: (format) =>
+        fileName: (format: string) =>
           isCustomElement
             ? `vue-admin-custom-elements.ce.${format}.js`
             : isLibrary
@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
         external: isCustomElement ? [] : ["vue"], // Keep Vue external for the library
         output: {
           format: isCustomElement ? "iife" : undefined,
-          globals: { vue: "Vue" },
+          globals: {vue: "Vue"},
           inlineDynamicImports: true, // Prevent code splitting for IIFE
         },
       },

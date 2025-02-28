@@ -1,0 +1,12 @@
+{
+  "src/elements.ts": {
+    "file": "vue-admin-custom-elements.ce.iife.js",
+    "name": "elements",
+    "src": "src/elements.ts",
+    "isEntry": true
+  },
+  "style.css": {
+    "file": "vue-admin-custom-elements.css",
+    "src": "style.css"
+  }
+}

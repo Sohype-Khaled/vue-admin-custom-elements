@@ -8,6 +8,7 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
+  "type": "module",
   "main": "dist/lib/vue-admin-custom-elements.lib.umd.js",
   "module": "dist/lib/vue-admin-custom-elements.lib.es.js",
   "types": "dist/lib/index.d.ts",
