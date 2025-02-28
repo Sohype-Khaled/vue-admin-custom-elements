@@ -8,6 +8,55 @@ export default defineConfig(({mode}) => {
   const isCustomElement = mode === "custom-element";
   const isLibrary = mode === "library";
 
+  const CommonBuildConfig = {
+    outDir: "dist/dev",
+    emptyOutDir: false,
+    lib: {
+      entry: "./src/index.ts",
+      name: "VueAdminCustomElements",
+      fileName: (format: string) => `vue-admin-custom-elements.dev.${format}.js`
+    }
+  }
+
+  const CEBuildConfig = {
+    outDir: "dist/ce",
+    manifest: true,
+    lib: {
+      entry: "./src/elements.ts",
+      filename: (format: string) => `vue-admin-custom-elements.ce.${format}.js`,
+      formats: ["iife"]
+    },
+    rollupOptions: {
+      output: {
+        format: "iife",
+        inlineDynamicImports: true, // Prevent code splitting for IIFE
+      },
+    },
+  }
+  const LibraryBuildConfig = {
+    outDir: "dist/lib",
+    cssCodeSplit: true,
+    lib: {
+      entry: "./src/library.ts",
+      filename: (format: string) => `vue-admin-custom-elements.lib.${format}.js`,
+      formats: ["es", "umd"]
+    },
+    rollupOptions: {
+      external: ["vue"],
+      output: {
+        globals: {vue: "Vue"},
+      },
+    },
+  }
+
+  const selectedConfig = isLibrary
+    ? LibraryBuildConfig
+    : isCustomElement
+      ? CEBuildConfig
+      : {};
+
+  const finalBuildConfig = { ...CommonBuildConfig, ...selectedConfig };
+
   return {
     define: {"process.env.NODE_ENV": JSON.stringify("production")},
     plugins: [
@@ -21,44 +70,20 @@ export default defineConfig(({mode}) => {
       }),
       isLibrary &&
       dts({
+        entryRoot: "./src",
         outDir: "dist/lib",
         insertTypesEntry: true,
         cleanVueFileName: true,
+        rollupTypes: true,
+        tsconfigPath: "./tsconfig.json",
+        include: ["./src/**/*", "./src/types/**/*"],
       }),
-    ].filter(Boolean), // Remove `false` values from the plugins array
+    ].filter(Boolean),
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
-    build: {
-      outDir: isCustomElement ? "dist/ce" : isLibrary ? "dist/lib" : "dist/dev",
-      emptyOutDir: false,
-      manifest: !isLibrary,
-      cssCodeSplit: !isCustomElement,
-      lib: {
-        entry: isCustomElement
-          ? "./src/elements.ts"
-          : isLibrary
-            ? "./src/library.ts"
-            : "./src/index.ts",
-        name: "MyComponentLibrary",
-        fileName: (format: string) =>
-          isCustomElement
-            ? `vue-admin-custom-elements.ce.${format}.js`
-            : isLibrary
-              ? `vue-admin-custom-elements.lib.${format}.js`
-              : `vue-admin-custom-elements.dev.${format}.js`,
-        formats: isCustomElement ? ["iife"] : ["es", "umd"],
-      },
-      rollupOptions: {
-        external: isCustomElement ? [] : ["vue"], // Keep Vue external for the library
-        output: {
-          format: isCustomElement ? "iife" : undefined,
-          globals: {vue: "Vue"},
-          inlineDynamicImports: true, // Prevent code splitting for IIFE
-        },
-      },
-    },
+    build: finalBuildConfig,
   };
 });

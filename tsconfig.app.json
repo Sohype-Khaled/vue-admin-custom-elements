@@ -9,6 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
+    "rootDir": "./src",
     "declaration": true,
     "outDir": "./dist",
     "paths": {
@@ -19,11 +20,10 @@
   },
   "types": [
     "node",
-    "./src/types.d.ts"
   ],
   "typeRoots": [
     "./node_modules/@types",
-    "./src/types.d.ts"
+    "./src/types"
   ],
   "exclude": [
     "scripts"
@@ -32,6 +32,7 @@
     "src",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/types/**/*.ts",
   ]
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineEmits, defineExpose, defineProps, type PropType, ref, watch} from "vue";
+import {defineExpose, type PropType, ref, watch} from "vue";
 import Btn from "@/components/ui/Btn.vue";
 
 const props = defineProps({
