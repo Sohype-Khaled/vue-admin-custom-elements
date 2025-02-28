@@ -8,10 +8,13 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
+  "main": "dist/lib/vue-admin-custom-elements.lib.umd.js",
+  "module": "dist/lib/vue-admin-custom-elements.lib.es.js",
   "types": "dist/lib/index.d.ts",
-  "type": "module",
-  "main": "dist/vue-admin-custom-elements.js",
-  "module": "dist/vue-admin-custom-elements.js",
+  "exports": {
+    "import": "./dist/lib/vue-admin-custom-elements.lib.es.js",
+    "require": "./dist/lib/vue-admin-custom-elements.lib.umd.js"
+  },
   "files": [
     "dist"
   ],
