@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const isLibrary = mode === "library";
 
   return {
+    define: { "process.env.NODE_ENV": JSON.stringify("production") },
     plugins: [
       vue({
         template: {
