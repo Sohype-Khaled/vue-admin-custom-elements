@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         external: isCustomElement ? [] : ["vue"], // Keep Vue external for the library
         output: {
+          format: isCustomElement ? "iife" : undefined,
           globals: { vue: "Vue" },
           inlineDynamicImports: true, // Prevent code splitting for IIFE
         },
