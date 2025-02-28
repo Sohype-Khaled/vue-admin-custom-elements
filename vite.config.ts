@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: isCustomElement ? "dist/ce" : isLibrary ? "dist/lib" : "dist/dev",
       emptyOutDir: false,
+      manifest: !isLibrary,
+      cssCodeSplit: !isCustomElement,
       lib: {
         entry: isCustomElement
           ? "./src/elements.ts"
