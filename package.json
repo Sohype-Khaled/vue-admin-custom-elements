@@ -8,7 +8,7 @@
     "name": "Sohype Khaled",
     "email": "sohype.mop@gmail.com"
   },
-  "types": "dist/vue-admin-custom-elements.d.ts",
+  "types": "dist/lib/index.d.ts",
   "type": "module",
   "main": "dist/vue-admin-custom-elements.js",
   "module": "dist/vue-admin-custom-elements.js",
@@ -21,7 +21,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build:dev": "vue-tsc -b && vite build --mode development",
+    "build:ce": "vue-tsc -b && vite build --mode custom-element",
+    "build:lib": "vue-tsc -b && vite build --mode library",
+    "build": "yarn build:lib && yarn build:ce",
     "deploy": "npm run build && git add dist -f && git commit -m 'Deploy to GitHub Pages' && git subtree push --prefix dist origin gh-pages",
     "preview": "vite preview"
   },
@@ -36,6 +39,7 @@
     "flowbite": "^2.5.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "vite-plugin-dts": "^4.5.1",
     "vue": "^3.5.13",
     "vuedraggable": "^4.1.0"
   },
